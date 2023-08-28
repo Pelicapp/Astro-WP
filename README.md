@@ -12,6 +12,7 @@ Then install your Wordpress and add the WPGraphQL plugin.
 
 Go to /frontend and run 
 ```
+npm install
 npm run dev
 ```
 Go to your Astro website and view the fetched WordPress articles.
