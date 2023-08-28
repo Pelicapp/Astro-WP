@@ -1,0 +1,34 @@
+---
+import PostCard from "../components/PostCard.astro";
+import Layout from "../layouts/BaseLayout.astro";
+import { wordpressQuery } from "../data/wordpress";
+
+const data = await wordpressQuery({
+  query: `
+	query LoadAllExcerpts {
+		posts {
+			nodes {
+			title
+			slug
+			excerpt
+			}
+		}
+	}`,
+});
+---
+
+<Layout title="Home">
+  <h1>Posts</h1>
+
+  {
+    data.posts.nodes.map((article: any) => {
+      return (
+        <PostCard
+          title={article.title}
+          link={"/blog/" + article.slug}
+          description={article.excerpt}
+        />
+      );
+    })
+  }
+</Layout>

@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  link: string;
+  description: string;
+}
+
+const { title, link, description } = Astro.props;
+---
+
+<article>
+  <h2><a href={link}>{title}</a></h2>
+  <Fragment set:html={description} />
+  <p>
+    <a href={link}>Read post &rarr;</a>
+  </p>
+</article>

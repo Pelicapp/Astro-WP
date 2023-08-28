@@ -1,0 +1,62 @@
+---
+import Layout from "../../layouts/BaseLayout.astro";
+import { wordpressQuery } from "../../data/wordpress";
+
+export async function getStaticPaths() {
+  const data = await wordpressQuery({
+    query: `
+    query LoadAllPosts {
+      posts {
+        nodes {
+          title
+          slug
+          featuredImage {
+            node {
+              mediaItemUrl
+              srcSet
+              sizes
+              altText
+            }
+          }
+          content(format: RENDERED)
+          author {
+            node {
+              name
+            }
+          }
+        }
+      }
+  }`,
+  });
+
+  return data.posts.nodes.map((article: any) => {
+    return {
+      params: { slug: article.slug },
+      props: { article },
+    };
+  });
+}
+
+const { article } = Astro.props;
+---
+
+<Layout title="Example Blog Post">
+  {
+    article.featuredImage && (
+      <img
+        src={article.featuredImage.node.mediaItemUrl}
+        alt={article.featuredImage.node.alt}
+        sizes={article.featuredImage.node.sizes}
+        srcset={article.featuredImage.node.srcSet}
+      />
+    )
+  }
+
+  <h1>{article.title}</h1>
+
+  <Fragment set:html={article.content} />
+
+  <p>
+    <a href="/">Back To Home</a>
+  </p>
+</Layout>
